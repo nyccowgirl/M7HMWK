@@ -48,7 +48,7 @@ public class Main {
             double women, white, black, asian, other, hispanic, us;
             int year;
 
-            String line = fileScan.nextLine();          // Column headers
+            String line = fileScan.nextLine();          // Column headers (2 rows to start)
             line = fileScan.nextLine();
 
             while (fileScan.hasNext()) {
