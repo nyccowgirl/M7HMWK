@@ -19,16 +19,23 @@ public class Main {
         fillMapByID(trialMap);
 
         // Query 1 - number of trials that meet the threshold for certain categories:
-        int countWomenTrials = countAboveThreshold(trialMap, Category.WOMEN);
+        Map<Category, ArrayList> thresholdMap = new HashMap<>();
+        ArrayList<Trial> womenList = new ArrayList<>();
+        ArrayList<Trial> blackList = new ArrayList<>();
+        countAboveThreshold(trialMap, womenList, Category.WOMEN);
+        countAboveThreshold(trialMap, blackList, Category.BLACK);
+
+        thresholdMap.put(Category.WOMEN, womenList);
+        thresholdMap.put(Category.BLACK, blackList);
 
         System.out.println("Number of " + trialMap.size() + " trials in 2017-2018 with appropriate representation of women: " +
-                countWomenTrials + " (" + String.format("%.1f", (double) countWomenTrials/trialMap.size() * 100) + "%)");
+                womenList.size() + " (" + String.format("%.1f", (double) womenList.size()/trialMap.size() * 100) + "%)");
 
-        int countBlackTrials = countAboveThreshold(trialMap, Category.BLACK);
         System.out.println("Number of " + trialMap.size() + " trials in 2017-2018 with appropriate representation of African Americans: " +
-                countBlackTrials + " (" + String.format("%.1f", (double)countBlackTrials/trialMap.size() * 100) + "%)");
+                blackList.size() + " (" + String.format("%.1f", (double)blackList.size()/trialMap.size() * 100) + "%)");
 
         // Query 2 - list of trials that meet threshold for all major categories:
+        // Another option is to build out all the lists and compare whether ID is in each list.
         ArrayList<Trial> trials = fairRepresentation(trialMap);
 
         System.out.println("The following trials had fair representation of women, African Americans, Asians and Hispanics:");
@@ -141,8 +148,7 @@ public class Main {
         }
     }
 
-    private static int countAboveThreshold(Map<String, Trial> map, Category category) {
-        int total = 0;
+    private static void countAboveThreshold(Map<String, Trial> map, ArrayList<Trial> list, Category category) {
 
         Collection<Trial> values = map.values();
         Iterator<Trial> iterator = values.iterator();
@@ -153,27 +159,26 @@ public class Main {
             switch (category) {
                 case WOMEN -> {
                     if (t.getWomen() >= WOMEN_IN_US) {
-                        total++;
+                        list.add(t);
                     }
                 }
                 case BLACK -> {
                     if (t.getBlack() >= BLACK_IN_US) {
-                        total++;
+                        list.add(t);
                     }
                 }
                 case ASIAN -> {
                     if (t.getAsian() >= ASIAN_IN_US) {
-                        total++;
+                        list.add(t);
                     }
                 }
                 case HISPANIC -> {
                     if (t.getHispanic() >= HISPANIC_IN_US) {
-                        total++;
+                        list.add(t);
                     }
                 }
             }
         }
-        return total;
     }
 
     private static ArrayList fairRepresentation(Map<String, Trial> map) {

@@ -1,4 +1,6 @@
-public class Trial {
+import java.util.Comparator;
+
+public class Trial implements Comparable<Trial> {
     private String id, brand, description;
     private double women, white, black, asian, other, hispanic, us;
     private int year;
@@ -111,4 +113,27 @@ public class Trial {
         return "Trial [id=" + id + ", brand=" + brand + ", year=" + year + "]";
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Trial) {
+            Trial o = (Trial) obj;
+            return (id == o.getId() && brand.equalsIgnoreCase(o.getBrand()) &&
+                    description.equalsIgnoreCase(o.getDescription()) && (Math.abs(women - o.getWomen()) < .01) &&
+                    (Math.abs(white - o.getWhite()) < .01) && (Math.abs(black - o.getBlack()) < .01) &&
+                    (Math.abs(asian - o.getAsian()) < .01) && (Math.abs(other - o.getOther()) < .01) &&
+                    (Math.abs(hispanic - o.getHispanic()) < .01) && (Math.abs(us - o.getUs()) < .01) &&
+                    year == o.getYear());
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public int compareTo(Trial obj) {
+        if (brand.compareTo(obj.getBrand()) != 0) {
+            return brand.compareTo(obj.getBrand());
+        } else {
+            return id.compareTo(obj.getId());
+        }
+    }
 }
